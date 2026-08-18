@@ -119,15 +119,14 @@ ARCHITECTURE_DESIGN) rather than attempts to replicate what a real static-analys
 Swapping in a real SAST/secrets scanner or a language-server-backed reference index is a
 same-interface change (`PolicyGuardrail`, `Agent`), not a redesign.
 
-### 6. `BLOCKED_GUARDRAIL` has no resume/override path
+### 6. `BLOCKED_GUARDRAIL` is intentionally terminal
 
 Once a guardrail blocks a stage, the run is terminal (see `Run.isTerminal()` and its comment) —
-there's no API to override a guardrail decision and resume. A real system would want an explicit,
-audited override mechanism (e.g. a second, higher-privilege approval that supersedes the guardrail,
-itself logged). This was scoped out to keep the governance model's core property — "a policy
-violation halts the run, full stop, pending human intervention" — unambiguous in the prototype;
-adding an override is a natural extension of the existing `ApprovalRequest`/checkpoint mechanism,
-not a new mechanism.
+there is no API that lets a human approval bypass the policy decision. A production extension
+could allow an operator to correct the requirement or configuration and start a new governed run,
+while preserving the blocked run and its audit history as immutable evidence. This keeps approval
+checkpoints and policy enforcement independent: humans control high-impact progression, but they
+do not silently supersede security, compliance, or change-control guardrails.
 
 ### 7. Only one re-planning trigger is wired up
 

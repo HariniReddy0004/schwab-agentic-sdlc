@@ -1,6 +1,6 @@
 # Schwab Agentic SDLC Framework
 
-[![CI Workflow](https://img.shields.io/badge/CI-GitHub%20Actions-blue.svg)](.github/workflows/ci.yml)
+[![Java 21 verification](https://github.com/HariniReddy0004/schwab-agentic-sdlc/actions/workflows/ci.yml/badge.svg)](https://github.com/HariniReddy0004/schwab-agentic-sdlc/actions/workflows/ci.yml)
 ![Java 21](https://img.shields.io/badge/Java-21-orange.svg)
 ![Tests](https://img.shields.io/badge/Tests-48%20focused-brightgreen.svg)
 ![Build](https://img.shields.io/badge/Build-Zero%20Dependency-blue.svg)
@@ -20,10 +20,11 @@ target artifact. Two independent Java 21 applications:
 
 ## Start here
 
+- **Quick start:** run [`./test-all.sh`](test-all.sh) from the repository root to compile both applications and execute all 48 tests.
 - **Recruiters:** [`docs/RECRUITER_WALKTHROUGH.md`](docs/RECRUITER_WALKTHROUGH.md) — five-minute review and two-minute project explanation.
-- **Architects:** [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/FINAL_ENGINEERING_SUMMARY.md`](docs/FINAL_ENGINEERING_SUMMARY.md) — design, decisions, risks, and trade-offs.
+- **Architecture and AI practices:** [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/TESTING_AND_TRADEOFFS.md`](docs/TESTING_AND_TRADEOFFS.md) — orchestration design, AI-assisted execution, testing, limitations, and trade-offs.
 - **Developers:** [`docs/SETUP.md`](docs/SETUP.md), [`docs/API_CONTRACT.md`](docs/API_CONTRACT.md), and [`docs/openapi.yaml`](docs/openapi.yaml) — build instructions and API contract.
-- **Technical reviewers:** [`docs/REQUIREMENTS_TRACEABILITY.md`](docs/REQUIREMENTS_TRACEABILITY.md) and [`docs/TESTING_AND_TRADEOFFS.md`](docs/TESTING_AND_TRADEOFFS.md) — requirement evidence, testing, and limitations.
+- **Technical reviewers:** [`docs/REQUIREMENTS_TRACEABILITY.md`](docs/REQUIREMENTS_TRACEABILITY.md) and [`docs/FINAL_ENGINEERING_SUMMARY.md`](docs/FINAL_ENGINEERING_SUMMARY.md) — requirement evidence, decisions, risks, assumptions, and validation.
 - **Execution evidence:** [`scenarios/`](scenarios/) — captured greenfield, brownfield, ambiguous, and guardrail-block runs.
 
 ## Build approach
