@@ -1,0 +1,17 @@
+# Java build output
+target/
+*.class
+*.jar
+
+# IDE and operating-system files
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# Local runtime configuration and secrets
+.env
+*.local
+
+# Runtime logs generated after cloning
+orchestrator/audit-log/

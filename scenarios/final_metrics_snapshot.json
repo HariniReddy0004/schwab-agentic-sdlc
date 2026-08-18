@@ -1,0 +1,1 @@
+{"runsStarted":4,"runsSucceeded":3,"runsFailed":1,"successRate":0.75,"stagesExecuted":56,"stageRetries":30,"retryFrequency":0.5357142857142857,"rollbacks":0,"rollbackFrequency":0.0,"approvalsGranted":8,"approvalsRejected":0,"guardrailBlocks":1,"fallbacksUsed":25,"mttrMillis":219.48,"avgEndToEndLatencyMillis":16738.75}

@@ -1,0 +1,213 @@
+openapi: 3.1.0
+info:
+  title: Agentic SDLC and URL Shortener APIs
+  version: 1.0.0
+  description: Machine-readable contract for the two assessment services.
+servers:
+  - url: http://localhost:8080
+    description: Agentic orchestrator
+  - url: http://localhost:8081
+    description: URL shortener
+paths:
+  /api/v1/runs:
+    post:
+      operationId: startRun
+      summary: Start a governed SDLC run
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RunRequest' }
+      responses:
+        '201':
+          description: Run accepted
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RunSummary' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+    get:
+      operationId: listRuns
+      summary: List all runs
+      responses:
+        '200': { description: Run summaries }
+  /api/v1/runs/{runId}:
+    parameters:
+      - $ref: '#/components/parameters/RunId'
+    get:
+      operationId: getRun
+      summary: Read run state, stages, checkpoints, and replans
+      responses:
+        '200': { description: Complete run state }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /api/v1/runs/{runId}/graph:
+    parameters:
+      - $ref: '#/components/parameters/RunId'
+    get:
+      operationId: getGraph
+      summary: Read dependency nodes and parallel batches
+      responses:
+        '200': { description: Dependency graph }
+  /api/v1/runs/{runId}/outputs:
+    parameters:
+      - $ref: '#/components/parameters/RunId'
+    get:
+      operationId: getOutputs
+      summary: Read stage artifacts
+      responses:
+        '200': { description: Stage outputs }
+  /api/v1/runs/{runId}/lineage:
+    parameters:
+      - $ref: '#/components/parameters/RunId'
+    get:
+      operationId: getLineage
+      summary: Read decisions and rationale
+      responses:
+        '200': { description: Decision lineage }
+  /api/v1/runs/{runId}/audit:
+    parameters:
+      - $ref: '#/components/parameters/RunId'
+    get:
+      operationId: getAudit
+      summary: Read the audit trail
+      responses:
+        '200': { description: Audit events }
+  /api/v1/runs/{runId}/approvals/{checkpointId}:
+    parameters:
+      - $ref: '#/components/parameters/RunId'
+      - name: checkpointId
+        in: path
+        required: true
+        schema: { type: string }
+    post:
+      operationId: decideApproval
+      summary: Approve or reject a human checkpoint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ApprovalDecision' }
+      responses:
+        '200': { description: Decision recorded }
+        '409': { description: Checkpoint already decided or run is terminal }
+  /api/v1/runs/{runId}/safe-stop:
+    parameters:
+      - $ref: '#/components/parameters/RunId'
+    post:
+      operationId: safeStop
+      summary: Stop a run at a safe boundary
+      responses:
+        '200': { description: Stop requested }
+  /api/v1/metrics:
+    get:
+      operationId: getMetrics
+      summary: Read reliability metrics
+      responses:
+        '200': { description: Success, retry, rollback, MTTR, and latency metrics }
+  /api/v1/urls:
+    post:
+      operationId: createShortUrl
+      summary: Create a short URL
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateUrlRequest' }
+      responses:
+        '201': { description: Short URL created }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '409': { description: Alias already exists }
+        '429': { description: Creation rate limit exceeded }
+  /api/v1/urls/{code}:
+    parameters:
+      - $ref: '#/components/parameters/Code'
+    get:
+      operationId: getUrlMetadata
+      summary: Read short URL metadata
+      responses:
+        '200': { description: URL metadata }
+    delete:
+      operationId: deactivateUrl
+      summary: Deactivate a short URL
+      responses:
+        '200': { description: URL deactivated }
+  /api/v1/urls/{code}/analytics:
+    parameters:
+      - $ref: '#/components/parameters/Code'
+    get:
+      operationId: getUrlAnalytics
+      summary: Read click analytics
+      responses:
+        '200': { description: Totals, UTC day-of-week distribution, and top referrers }
+  /{code}:
+    parameters:
+      - $ref: '#/components/parameters/Code'
+    get:
+      operationId: redirect
+      summary: Resolve a short URL
+      responses:
+        '302': { description: Redirect to destination }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '410': { description: URL expired or deactivated }
+        '429': { description: Redirect rate limit exceeded }
+components:
+  parameters:
+    RunId:
+      name: runId
+      in: path
+      required: true
+      schema: { type: string, pattern: '^run-[a-f0-9]{8}$' }
+    Code:
+      name: code
+      in: path
+      required: true
+      schema: { type: string, pattern: '^[A-Za-z0-9]{1,32}$' }
+  schemas:
+    RunRequest:
+      type: object
+      required: [scenarioType, requirementText]
+      properties:
+        scenarioType: { type: string, enum: [GREENFIELD, BROWNFIELD, AMBIGUOUS] }
+        title: { type: string, minLength: 1, maxLength: 200 }
+        requirementText: { type: string, minLength: 1, maxLength: 20000 }
+        repoContextPath: { type: string }
+        requestedBy: { type: string }
+    RunSummary:
+      type: object
+      required: [runId, scenarioType, title, state, createdAt, pendingApprovalCount]
+      properties:
+        runId: { type: string }
+        scenarioType: { type: string }
+        title: { type: string }
+        state: { type: string }
+        createdAt: { type: string, format: date-time }
+        pendingApprovalCount: { type: integer, minimum: 0 }
+    ApprovalDecision:
+      type: object
+      required: [decision, approver]
+      properties:
+        decision: { type: string, enum: [APPROVED, REJECTED] }
+        approver: { type: string, minLength: 1 }
+        comment: { type: string }
+    CreateUrlRequest:
+      type: object
+      required: [longUrl]
+      properties:
+        longUrl: { type: string, format: uri, maxLength: 2048 }
+        customAlias: { type: string, pattern: '^[A-Za-z0-9]{1,32}$' }
+        ttlSeconds: { type: integer, minimum: 1, maximum: 315360000 }
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error: { type: string }
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
