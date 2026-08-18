@@ -22,6 +22,7 @@ public final class MicroTest {
     }
 
     public static final class AssertionFailure extends RuntimeException {
+        private static final long serialVersionUID = 1L;
         public AssertionFailure(String message) {
             super(message);
         }

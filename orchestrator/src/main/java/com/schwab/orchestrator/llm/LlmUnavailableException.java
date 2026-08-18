@@ -2,6 +2,7 @@ package com.schwab.orchestrator.llm;
 
 /** Thrown when no LLM call can be made (no API key configured, or the call failed/timed out). Callers fall back to FallbackAgentEngine. */
 public class LlmUnavailableException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
     public LlmUnavailableException(String message) {
         super(message);
     }

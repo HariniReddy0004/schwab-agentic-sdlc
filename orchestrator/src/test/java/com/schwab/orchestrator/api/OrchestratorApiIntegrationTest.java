@@ -123,6 +123,7 @@ public class OrchestratorApiIntegrationTest {
         long deadline = System.currentTimeMillis() + timeoutMs;
         while (System.currentTimeMillis() < deadline) {
             Map<String, Object> status = getRun(client, base, runId);
+            @SuppressWarnings("unchecked")
             List<Map<String, Object>> pending = (List<Map<String, Object>>) status.get("pendingApprovals");
             if (pending.stream().anyMatch(p -> checkpointId.equals(p.get("checkpointId")))) return;
             Thread.sleep(50);

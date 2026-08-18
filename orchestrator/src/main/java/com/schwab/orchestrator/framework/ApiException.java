@@ -2,6 +2,7 @@ package com.schwab.orchestrator.framework;
 
 /** Exception carrying an HTTP status code + machine-readable error code, caught centrally by the Router. */
 public class ApiException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
     private final int status;
     private final String code;
 
