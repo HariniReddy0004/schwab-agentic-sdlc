@@ -18,19 +18,13 @@ target artifact. Two independent Java 21 applications:
   to reason about and produce output for (see the brownfield scenario, which does genuine static
   analysis against this codebase).
 
-Start here:
+## Start here
 
-- [`docs/RECRUITER_WALKTHROUGH.md`](docs/RECRUITER_WALKTHROUGH.md) — five-minute review and a natural two-minute explanation
-- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — components, orchestration model, control flow, key decisions
-- [`docs/API_CONTRACT.md`](docs/API_CONTRACT.md) — endpoints, request/response fields, validation, and status codes
-- [`docs/openapi.yaml`](docs/openapi.yaml) — machine-readable OpenAPI 3.1 contract
-- [`docs/SETUP.md`](docs/SETUP.md) — how to build and run both services
-- [`docs/TESTING_AND_TRADEOFFS.md`](docs/TESTING_AND_TRADEOFFS.md) — testing approach, limitations, trade-offs
-- [`docs/FINAL_ENGINEERING_SUMMARY.md`](docs/FINAL_ENGINEERING_SUMMARY.md) — plan, rationale, risks, assumptions
-- [`docs/JAVA21_EDGE_CASE_REVIEW.md`](docs/JAVA21_EDGE_CASE_REVIEW.md) — Java 21 compatibility, hardened edge cases, and residual risks
-- [`docs/REQUIREMENTS_TRACEABILITY.md`](docs/REQUIREMENTS_TRACEABILITY.md) — direct map from every assignment requirement to implementation evidence
-- [`scenarios/`](scenarios/) — three end-to-end runs (greenfield, brownfield, ambiguous) captured as raw API evidence + write-ups
-- [`scenarios/IMPLEMENTED_OUTCOMES.md`](scenarios/IMPLEMENTED_OUTCOMES.md) — trace from scenario decisions to final source code and tests
+- **Recruiters:** [`docs/RECRUITER_WALKTHROUGH.md`](docs/RECRUITER_WALKTHROUGH.md) — five-minute review and two-minute project explanation.
+- **Architects:** [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/FINAL_ENGINEERING_SUMMARY.md`](docs/FINAL_ENGINEERING_SUMMARY.md) — design, decisions, risks, and trade-offs.
+- **Developers:** [`docs/SETUP.md`](docs/SETUP.md), [`docs/API_CONTRACT.md`](docs/API_CONTRACT.md), and [`docs/openapi.yaml`](docs/openapi.yaml) — build instructions and API contract.
+- **Technical reviewers:** [`docs/REQUIREMENTS_TRACEABILITY.md`](docs/REQUIREMENTS_TRACEABILITY.md) and [`docs/TESTING_AND_TRADEOFFS.md`](docs/TESTING_AND_TRADEOFFS.md) — requirement evidence, testing, and limitations.
+- **Execution evidence:** [`scenarios/`](scenarios/) — captured greenfield, brownfield, ambiguous, and guardrail-block runs.
 
 ## Build approach
 
@@ -42,6 +36,13 @@ execution boundaries that can later be moved behind a production framework.
 The repository includes 25 tests for `url-shortener`, 23 for `orchestrator`, and three captured
 end-to-end scenario runs under `scenarios/`. Run both test scripts with JDK 21 or newer before submission;
 they compile the applications from a clean output directory before executing the suite.
+
+## AI-assisted development approach
+
+I built this project with assistance from Claude, ChatGPT, and Gemini, as encouraged by the
+assessment. I mainly used them to clarify requirements, compare a few implementation ideas, think
+through edge cases, and improve parts of the documentation. I reviewed the suggestions before
+using them and verified the final project by running all 48 tests.
 
 ## Quick start
 

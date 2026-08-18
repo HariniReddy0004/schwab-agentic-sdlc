@@ -24,15 +24,13 @@
   cycle introduction is rejected.
 - `SecurityGuardrailTest`, `ComplianceGuardrailTest` — guardrail logic in isolation, no engine needed.
 - `MetricsRegistryTest` — success rate / retry frequency / MTTR arithmetic.
-- `ExecutionEngineTest` — the important one. Boots a fully-wired `ExecutionEngine` (real governance,
-  real reliability policies, real audit logging to a temp dir) with **no `ANTHROPIC_API_KEY` set**,
-  so these tests verify the retry→fallback path on every stage, not just the ones that name it. Five
-  scenarios: happy path through both approval gates to `COMPLETED`; rejecting the implementation
-  gate fails the run; the security guardrail blocks a run even after human approval; an ambiguous
-  requirement triggers the clarification re-plan and the run still completes afterward; safe-stop
-  halts a run before completion. Async state is asserted via short-interval polling helpers
-  (`EngineTestHarness.await*`), not fixed sleeps, so the suite is fast when things are fast and
-  doesn't flake when they're briefly slower.
+- `ExecutionEngineTest` — boots a fully wired `ExecutionEngine` with real governance,
+  reliability policies, and audit logging. The six tests cover successful completion through both
+  approval gates, rejected implementation approval, security guardrail blocking after approval,
+  clarification and dynamic replanning, safe stop, and rejection of blank clarification or
+  duplicate terminal decisions. The suite runs without `ANTHROPIC_API_KEY`, so it also exercises
+  the retry-to-fallback behavior. Asynchronous state is checked through polling helpers rather
+  than fixed long sleeps.
 - `OrchestratorApiIntegrationTest` — the same lifecycle, but driven entirely over real HTTP against
   a real bound `HttpServer`, including reading back `/audit`, `/lineage`, and `/metrics`.
 
@@ -96,10 +94,9 @@ shaped by the actual scenario/requirement text passed in, not a canned string.
 The trade-off this creates: with a real key, `LlmBackedAgent` calls Claude with the prompts in
 `llm/PromptTemplates.java` and the resulting design docs/task lists/test plans/documentation would
 read as genuinely model-authored engineering judgment instead of the fallback's necessarily more
-formulaic output. Both code paths are exercised by the test suite (the tests run with no key, so
-they exercise fallback; nothing about the LLM path is mocked out — it's the same
-`LlmBackedAgent`/`ClaudeClient` code that would run with a real key, just observed failing fast and
-handing off).
+formulaic output. The automated suite exercises the no-key failure-to-fallback path through the
+real `LlmBackedAgent` and `ClaudeClient` wiring. A successful live Anthropic response is
+intentionally not tested because the automated suite does not require external credentials.
 
 ### 4. Single-process concurrency model
 

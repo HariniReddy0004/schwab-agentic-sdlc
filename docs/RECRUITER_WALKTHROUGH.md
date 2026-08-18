@@ -24,6 +24,14 @@ does not guess. It recognizes the ambiguity, inserts a clarification stage into 
 for a human answer, and continues with that answer in the shared context. The graph, approvals,
 outputs, decisions, retries, and timings remain visible through the audit and lineage APIs.
 
+## How I used AI-assisted development
+
+I used Claude, ChatGPT, and Gemini as supporting tools while working on the assessment. They were
+useful for clarifying requirements, comparing implementation ideas, checking possible edge cases,
+and improving documentation. I reviewed the suggestions I used and tested the final solution
+myself. This is similar to the approach demonstrated by the orchestrator: AI can assist the work,
+but important actions still need review, guardrails, and validation.
+
 ## Five-minute review path
 
 1. Run all tests from the repository root:
@@ -40,10 +48,10 @@ outputs, decisions, retries, and timings remain visible through the audit and li
 
 3. See the implementation behind it:
 
-   - `orchestrator/.../graph/DependencyGraph.java`
-   - `orchestrator/.../execution/ExecutionEngine.java`
-   - `orchestrator/.../reliability/ReplanningEngine.java`
-   - `orchestrator/.../governance/GovernanceEngine.java`
+   - `orchestrator/src/main/java/com/schwab/orchestrator/graph/DependencyGraph.java`
+   - `orchestrator/src/main/java/com/schwab/orchestrator/execution/ExecutionEngine.java`
+   - `orchestrator/src/main/java/com/schwab/orchestrator/reliability/ReplanningEngine.java`
+   - `orchestrator/src/main/java/com/schwab/orchestrator/governance/GovernanceEngine.java`
 
 4. Use `docs/REQUIREMENTS_TRACEABILITY.md` to map every assessment requirement to evidence.
 
